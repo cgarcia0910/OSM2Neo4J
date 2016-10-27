@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.skatestown.com/ns/invoice"
+    targetNamespace="http://www.skatestown.com/ns/invoice"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:po="http://www.skatestown.com/ns/po">
+
+
+<!-- Reeemplazada la localización del po.xsd -->
+ <xsd:import namespace="http://www.skatestown.com/ns/po"
+      schemaLocation="po.xsd"/>
+
+<!--    <xsd:import namespace="http://www.skatestown.com/ns/po" -->
+<!--       schemaLocation="http://www.skatestown.cm/schema/po.xsd"/> -->
+
+   <xsd:annotation>
+      <xsd:documentation xml:lang="en">
+         Invoice schema for SkatesTown.
+      </xsd:documentation>
+   </xsd:annotation>
+
+   <xsd:element name="invoice" type="invoiceType"/>
+
+   <xsd:complexType name="invoiceType">
+      <xsd:sequence>
+         <xsd:element name="billTo" type="po:addressType"/>
+         <xsd:element name="shipTo" type="po:addressType"/>
+         <xsd:element name="order">
+            <xsd:complexType>
+               <xsd:sequence>
+                  <xsd:element name="item" type="itemType"
+                               maxOccurs="unbounded"/>
+               </xsd:sequence>
+            </xsd:complexType>
+         </xsd:element>
+         <xsd:element name="tax" type="priceType"/>
+         <xsd:element name="shippingAndHandling" type="priceType"/>
+         <xsd:element name="totalCost" type="priceType"/>
+      </xsd:sequence>
+      <xsd:attribute name="id" use="required"
+                     type="xsd:positiveInteger"/>
+      <xsd:attribute name="submitted" use="required" type="xsd:date"/>
+   </xsd:complexType>
+
+   <xsd:complexType name="itemType">
+      <xsd:complexContent>
+         <xsd:extension base="po:itemType">
+            <xsd:attribute name="unitPrice" use="required"
+                           type="priceType"/>
+         </xsd:extension>
+      </xsd:complexContent>
+   </xsd:complexType>
+
+   <xsd:simpleType name="priceType">
+      <xsd:restriction base="xsd:decimal">
+         <xsd:minInclusive value="0"/>
+      </xsd:restriction>
+   </xsd:simpleType>
+
+</xsd:schema>
